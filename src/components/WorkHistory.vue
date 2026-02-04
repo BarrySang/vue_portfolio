@@ -7,15 +7,15 @@ const workData = getWorkExperience()
 
 <template>
   <SectionToggle title="Work History">
-    <div>
+    <div class="flex flex-col gap-3">
       <div
         v-for="(item, index) in workData"
         :key="index"
-        class="bg-[rgba(231,236,238,0.418)] rounded p-2.5 m-[5px] font-sans"
+        class="bg-card rounded-lg p-4 shadow-sm font-sans"
       >
-        <p>{{ item.organization }}</p>
-        <p>{{ item.position }}</p>
-        <p v-if="item.duration">{{ item.duration }}</p>
+        <p class="font-semibold text-gray-900">{{ item.organization }}</p>
+        <p class="text-gray-700">{{ item.position }}</p>
+        <p v-if="item.duration" class="text-sm text-muted mt-1">{{ item.duration }}</p>
       </div>
     </div>
   </SectionToggle>

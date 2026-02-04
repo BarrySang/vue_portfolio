@@ -7,15 +7,15 @@ const academicData = getAcademicData()
 
 <template>
   <SectionToggle title="Academic Qualifications">
-    <div>
+    <div class="flex flex-col gap-3">
       <div
         v-for="(item, index) in academicData"
         :key="index"
-        class="bg-[rgba(231,236,238,0.418)] rounded p-2 m-[5px] sm:p-2.5 font-sans"
+        class="bg-card rounded-lg p-4 shadow-sm font-sans"
       >
-        <p>{{ item.course }}</p>
-        <p>{{ item.school }}</p>
-        <p class="sm:text-base">{{ item.duration }}</p>
+        <p class="font-semibold text-gray-900">{{ item.course }}</p>
+        <p class="text-gray-700">{{ item.school }}</p>
+        <p class="text-sm text-muted mt-1">{{ item.duration }}</p>
       </div>
     </div>
   </SectionToggle>

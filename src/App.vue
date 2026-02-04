@@ -7,17 +7,15 @@ import AppFooter from './components/AppFooter.vue'
 </script>
 
 <template>
-  <div class="lg:w-3/4 lg:mx-auto">
+  <div class="max-w-4xl mx-auto px-3 sm:px-6">
     <ProfileHeader />
-    <section class="sm:grid sm:grid-cols-2 lg:grid-rows-2">
-      <div id="github-repos" class="overflow-y-auto border h-fit sm:h-[1000px] sm:col-start-1 sm:col-end-2 sm:row-start-1 sm:row-end-3">
-        <GithubRepos />
-      </div>
-      <div id="work-history" class="sm:col-start-2 sm:col-end-3 sm:row-start-1 sm:row-end-2 sm:mb-0">
+    <section class="flex flex-col gap-3">
+      <div class="flex flex-col gap-3 sm:grid sm:grid-cols-2">
         <WorkHistory />
-      </div>
-      <div id="academic-history" class="sm:col-start-2 sm:col-end-3 sm:row-start-2 sm:row-end-3">
         <AcademicHistory />
+      </div>
+      <div id="github-repos" class="overflow-y-auto max-h-[600px]">
+        <GithubRepos />
       </div>
     </section>
     <AppFooter />
