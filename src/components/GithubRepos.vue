@@ -10,7 +10,7 @@ const loading = ref(true)
 onMounted(() => {
   getRepos()
     .then(data => {
-      repos.value = data
+      repos.value = data.sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at))
     })
     .catch(err => {
       error.value = err.message || String(err)
