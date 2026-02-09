@@ -26,19 +26,34 @@ export function getAcademicData() {
 export function getWorkExperience() {
   return [
     {
+      organization: 'AutoXpress Kenya',
+      position: 'Light Vehicle Mechanic III – Training & Internship',
+      duration: 'July 2024 – December 2025'
+    },
+    {
+      organization: 'Chemomi Tea Factory',
+      position: 'Technical Division',
+      duration: 'September 2023 – December 2023'
+    },
+    {
+      organization: 'Salim Wazaran Kenya',
+      position: 'Technical Department',
+      duration: 'September 2022 – November 2022'
+    },
+    {
       organization: 'DigitalSelf',
-      position: 'Front End Web Developer',
-      duration: ''
+      position: 'Frontend Web Developer',
+      duration: 'January 2021'
     },
     {
       organization: 'Studio48',
-      position: 'Back-end Web Developer',
-      duration: ''
+      position: 'Backend Web Developer',
+      duration: 'April 2020 – May 2020'
     },
     {
       organization: 'Kapsabet Bible College',
-      position: 'Volunteer Computer Teacher',
-      duration: ''
+      position: 'Assistant Computer Teacher',
+      duration: 'May 2019 – August 2019'
     }
   ]
 }
