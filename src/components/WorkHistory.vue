@@ -11,7 +11,7 @@ const workData = getWorkExperience()
       <div
         v-for="(item, index) in workData"
         :key="index"
-        class="bg-card rounded-lg p-4 shadow-sm font-sans"
+        class="bg-card rounded-lg p-4 shadow-sm font-sans border-l-4 border-accent hover:shadow-md transition-shadow"
       >
         <p class="font-semibold text-gray-900">{{ item.organization }}</p>
         <p class="text-gray-700">{{ item.position }}</p>

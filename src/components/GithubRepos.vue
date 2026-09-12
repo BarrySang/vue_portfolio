@@ -24,9 +24,9 @@ onMounted(() => {
 <template>
   <SectionToggle title="Github Repositories">
     <div>
-      <div v-if="loading" class="flex flex-col gap-3">
+      <div v-if="loading" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         <div
-          v-for="n in 5"
+          v-for="n in 6"
           :key="n"
           class="bg-card rounded-lg p-4 animate-pulse"
         >
@@ -41,17 +41,19 @@ onMounted(() => {
         <p class="text-sm text-muted mt-2 border-t pt-2">{{ error }}</p>
       </div>
 
-      <div v-else class="flex flex-col gap-3">
+      <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         <a
           v-for="repo in repos"
           :key="repo.id"
           :href="repo.html_url"
           target="_blank"
-          class="bg-card rounded-lg p-4 shadow-sm font-sans block hover:shadow transition-shadow"
+          class="bg-card rounded-lg p-4 shadow-sm font-sans flex flex-col justify-between hover:shadow-md hover:-translate-y-0.5 transition-all"
         >
-          <p class="font-semibold text-gray-900">{{ repo.name }}</p>
-          <p v-if="repo.description" class="text-sm text-gray-700 mt-1">{{ repo.description }}</p>
-          <div class="flex items-center gap-4 mt-2 text-xs text-muted">
+          <div>
+            <p class="font-semibold text-gray-900 truncate">{{ repo.name }}</p>
+            <p v-if="repo.description" class="text-sm text-gray-700 mt-1 line-clamp-3">{{ repo.description }}</p>
+          </div>
+          <div class="flex items-center gap-4 mt-3 pt-2 border-t border-gray-200/60 text-xs text-muted">
             <span v-if="repo.language" class="flex items-center gap-1">
               <span class="w-2.5 h-2.5 rounded-full bg-accent inline-block"></span>
               {{ repo.language }}

@@ -18,7 +18,7 @@ export function getAcademicData() {
     {
       course: 'Certificate in Java Programming',
       school: 'East African Institute of Certified Studies',
-      duration: 'July 2018 - August 2018'
+      duration: 'August 2018 - September 2018'
     }
   ]
 }
@@ -27,8 +27,13 @@ export function getWorkExperience() {
   return [
     {
       organization: 'AutoXpress Kenya',
-      position: 'Light Vehicle Mechanic III – Training & Internship',
-      duration: 'July 2024 – December 2025'
+      position: 'Technician II – Light Vehicle Mechanic',
+      duration: 'March 2026 – Present'
+    },
+    {
+      organization: 'AutoXpress Kenya',
+      position: 'Light Vehicle Mechanic III – Internship',
+      duration: 'October 2024 – December 2024'
     },
     {
       organization: 'Chemomi Tea Factory',
