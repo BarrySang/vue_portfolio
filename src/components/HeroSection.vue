@@ -10,13 +10,13 @@
       Hi, I'm Barnabas Kipruto
     </h1>
     <p class="text-base sm:text-lg text-gray-700 max-w-2xl mx-auto sm:mx-0 mb-6">
-      I bridge mechanical engineering and software development — from vehicle
-      diagnostics and manufacturing systems to full stack web applications
-      built with React, Vue, and Laravel.
-    </p>
+  Mechanical technician with hands-on experience in vehicle servicing,
+  diagnostics, and repair, alongside web development experience across
+  Vue, React, Node, and PHP.
+</p>
     <div class="flex flex-col sm:flex-row items-center sm:items-start justify-center sm:justify-start gap-3">
       <a
-        href="mailto:barrysang8@gmail.com"
+        href="mailto:sangbarnabas2@gmail.com"
         class="inline-flex items-center justify-center gap-2 bg-gray-900 text-white px-5 py-2.5 rounded-lg text-sm sm:text-base font-medium hover:bg-gray-800 transition-colors"
       >
         Get in touch

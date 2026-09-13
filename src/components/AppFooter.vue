@@ -3,8 +3,8 @@ const year = new Date().getFullYear()
 
 const socialLinks = [
   { label: 'GitHub', href: 'https://github.com/barrysang' },
-  { label: 'Email', href: 'mailto:barrysang8@gmail.com' },
-  { label: 'Phone', href: 'tel:+254745905538' }
+  { label: 'Email', href: 'mailto:sangbarnabas2@gmail.com' },
+  { label: 'Phone', href: 'tel:0783998015' }
 ]
 </script>
 

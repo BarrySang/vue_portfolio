@@ -14,18 +14,18 @@
       <p class="text-sm text-muted">Nairobi, Kenya</p>
 
       <div class="flex flex-col gap-2 mt-3 text-gray-700 w-full">
-        <a href="mailto:barrysang8@gmail.com" class="flex items-center gap-2 justify-center sm:justify-start hover:text-gray-900 transition-colors">
+        <a href="mailto:sangbarnabas2@gmail.com" class="flex items-center gap-2 justify-center sm:justify-start hover:text-gray-900 transition-colors">
           <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 shrink-0" fill="currentColor" viewBox="0 0 16 16">
             <path d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414zM0 4.697v7.104l5.803-3.558zM6.761 8.83l-6.57 4.027A2 2 0 0 0 2 14h12a2 2 0 0 0 1.808-1.144l-6.57-4.027L8 9.586zm3.436-.586L16 11.801V4.697z" />
           </svg>
-          <span class="text-sm sm:text-base break-all">barrysang8@gmail.com</span>
+          <span class="text-sm sm:text-base break-all">sangbarnabas2@gmail.com</span>
         </a>
 
-        <a href="tel:+254745905538" class="flex items-center gap-2 justify-center sm:justify-start hover:text-gray-900 transition-colors">
+        <a href="tel:0783998015" class="flex items-center gap-2 justify-center sm:justify-start hover:text-gray-900 transition-colors">
           <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 shrink-0" fill="currentColor" viewBox="0 0 16 16">
             <path fill-rule="evenodd" d="M1.885.511a1.745 1.745 0 0 1 2.61.163L6.29 2.98c.329.423.445.974.315 1.494l-.547 2.19a.68.68 0 0 0 .178.643l2.457 2.457a.68.68 0 0 0 .644.178l2.189-.547a1.75 1.75 0 0 1 1.494.315l2.306 1.794c.829.645.905 1.87.163 2.611l-1.034 1.034c-.74.74-1.846 1.065-2.877.702a18.6 18.6 0 0 1-7.01-4.42 18.6 18.6 0 0 1-4.42-7.009c-.362-1.03-.037-2.137.703-2.877z" />
           </svg>
-          <span class="text-sm sm:text-base">0745905538</span>
+          <span class="text-sm sm:text-base">0783998015</span>
         </a>
 
         <a href="https://github.com/barrysang" target="_blank" class="flex items-center gap-2 justify-center sm:justify-start hover:text-gray-900 transition-colors">
