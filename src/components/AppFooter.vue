@@ -9,14 +9,15 @@ const socialLinks = [
 </script>
 
 <template>
-  <footer class="flex flex-col items-center justify-center gap-4 py-8 mt-6 border-t border-gray-200 font-sans">
+  <footer class="flex flex-col items-center justify-center gap-4 py-8 mt-6 border-t border-border font-sans">
     <div class="flex items-center gap-5">
       <a
         v-for="link in socialLinks"
         :key="link.label"
         :href="link.href"
         target="_blank"
-        class="text-sm text-muted hover:text-gray-900 transition-colors"
+        rel="noopener noreferrer"
+        class="text-sm text-muted hover:text-navy transition-colors"
       >
         {{ link.label }}
       </a>

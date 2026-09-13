@@ -28,7 +28,7 @@ onMounted(() => {
         <div
           v-for="n in 6"
           :key="n"
-          class="bg-card rounded-lg p-4 animate-pulse"
+          class="bg-card border border-border rounded-lg p-4 animate-pulse"
         >
           <div class="h-4 bg-gray-300 rounded w-2/3 mb-2"></div>
           <div class="h-3 bg-gray-200 rounded w-full mb-1.5"></div>
@@ -36,9 +36,9 @@ onMounted(() => {
         </div>
       </div>
 
-      <div v-else-if="error" class="bg-card rounded-lg p-4 shadow-sm font-sans">
-        <p class="font-semibold text-gray-900">An error occurred, please reload the page.</p>
-        <p class="text-sm text-muted mt-2 border-t pt-2">{{ error }}</p>
+      <div v-else-if="error" class="bg-card border border-border rounded-lg p-4 shadow-sm font-sans">
+        <p class="font-semibold text-navy">An error occurred, please reload the page.</p>
+        <p class="text-sm text-muted mt-2 border-t border-border pt-2">{{ error }}</p>
       </div>
 
       <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -47,15 +47,16 @@ onMounted(() => {
           :key="repo.id"
           :href="repo.html_url"
           target="_blank"
-          class="bg-card rounded-lg p-4 shadow-sm font-sans flex flex-col justify-between hover:shadow-md hover:-translate-y-0.5 transition-all"
+          rel="noopener noreferrer"
+          class="bg-card border border-border rounded-lg p-4 shadow-sm font-sans flex flex-col justify-between hover:shadow-md hover:-translate-y-0.5 transition-all"
         >
           <div>
-            <p class="font-semibold text-gray-900 truncate">{{ repo.name }}</p>
+            <p class="font-semibold text-navy truncate">{{ repo.name }}</p>
             <p v-if="repo.description" class="text-sm text-gray-700 mt-1 line-clamp-3">{{ repo.description }}</p>
           </div>
-          <div class="flex items-center gap-4 mt-3 pt-2 border-t border-gray-200/60 text-xs text-muted">
+          <div class="flex items-center gap-4 mt-3 pt-2 border-t border-border text-xs text-muted">
             <span v-if="repo.language" class="flex items-center gap-1">
-              <span class="w-2.5 h-2.5 rounded-full bg-accent inline-block"></span>
+              <span class="w-2.5 h-2.5 rounded-full bg-teal inline-block"></span>
               {{ repo.language }}
             </span>
             <span v-if="repo.stargazers_count > 0" class="flex items-center gap-1">

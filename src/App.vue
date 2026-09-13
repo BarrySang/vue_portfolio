@@ -11,7 +11,7 @@ import AppFooter from './components/AppFooter.vue'
   <div class="max-w-6xl mx-auto px-3 sm:px-6">
     <HeroSection />
 
-    <div class="h-px bg-gradient-to-r from-transparent via-accent to-transparent my-6"></div>
+    <div class="h-px bg-gradient-to-r from-transparent via-teal/40 to-transparent my-6"></div>
 
     <section class="flex flex-col gap-6 lg:grid lg:grid-cols-[minmax(0,320px)_1fr] lg:items-start">
       <div class="lg:sticky lg:top-6">
@@ -24,7 +24,7 @@ import AppFooter from './components/AppFooter.vue'
           <AcademicHistory />
         </div>
 
-        <div class="h-px bg-gradient-to-r from-transparent via-accent to-transparent"></div>
+        <div class="h-px bg-gradient-to-r from-transparent via-teal/40 to-transparent"></div>
 
         <div id="github-repos">
           <GithubRepos />

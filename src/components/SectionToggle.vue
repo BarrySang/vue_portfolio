@@ -15,7 +15,7 @@ function toggle() {
 <template>
   <div>
     <div
-      class="rounded-lg bg-accent/60 p-3 text-black font-sans flex items-center gap-2 cursor-pointer sm:cursor-default"
+      class="rounded-lg bg-navy-light p-3 text-navy font-sans flex items-center gap-2 cursor-pointer sm:cursor-default"
       @click="toggle"
     >
       <svg
@@ -29,7 +29,7 @@ function toggle() {
       >
         <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
       </svg>
-      <h2 class="text-lg font-semibold">{{ title }}</h2>
+      <h2 class="text-lg font-semibold tracking-wide">{{ title }}</h2>
     </div>
     <div class="mt-3 sm:block" :class="{ 'hidden': !isOpen }">
       <slot />

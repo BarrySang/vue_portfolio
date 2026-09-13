@@ -11,9 +11,9 @@ const academicData = getAcademicData()
       <div
         v-for="(item, index) in academicData"
         :key="index"
-        class="bg-card rounded-lg p-4 shadow-sm font-sans border-l-4 border-accent hover:shadow-md transition-shadow"
+        class="bg-card border border-border rounded-lg p-4 shadow-sm font-sans border-l-4 border-l-teal hover:shadow-md transition-shadow"
       >
-        <p class="font-semibold text-gray-900">{{ item.course }}</p>
+        <p class="font-semibold text-navy">{{ item.course }}</p>
         <p class="text-gray-700">{{ item.school }}</p>
         <p class="text-sm text-muted mt-1">{{ item.duration }}</p>
       </div>
