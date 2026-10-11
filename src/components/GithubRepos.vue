@@ -7,6 +7,11 @@ const repos = ref([])
 const error = ref(null)
 const loading = ref(true)
 
+function formatRepoName(name) {
+  const sentenceCaseName = name.toLowerCase()
+  return sentenceCaseName.charAt(0).toUpperCase() + sentenceCaseName.slice(1)
+}
+
 onMounted(() => {
   getRepos()
     .then(data => {
@@ -28,7 +33,7 @@ onMounted(() => {
         <div
           v-for="n in 6"
           :key="n"
-          class="bg-card border border-border rounded-lg p-4 animate-pulse"
+          class="min-h-40 bg-card border border-border rounded-xl p-5 animate-pulse"
         >
           <div class="h-4 bg-gray-300 rounded w-2/3 mb-2"></div>
           <div class="h-3 bg-gray-200 rounded w-full mb-1.5"></div>
@@ -48,15 +53,14 @@ onMounted(() => {
           :href="repo.html_url"
           target="_blank"
           rel="noopener noreferrer"
-          class="bg-card border border-border rounded-lg p-4 shadow-sm font-sans flex flex-col justify-between hover:shadow-md hover:-translate-y-0.5 transition-all"
+          class="min-h-40 bg-card border border-border rounded-xl p-5 shadow-sm font-sans flex flex-col justify-between transition-[border-color,box-shadow] hover:border-teal/50 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal focus-visible:ring-offset-2"
         >
           <div>
-            <p class="font-semibold text-navy truncate">{{ repo.name }}</p>
-            <p v-if="repo.description" class="text-sm text-gray-700 mt-1 line-clamp-3">{{ repo.description }}</p>
+            <p class="text-lg font-semibold leading-snug text-navy break-words">{{ formatRepoName(repo.name) }}</p>
+            <p v-if="repo.description" class="text-sm text-muted mt-2 leading-relaxed line-clamp-3">{{ repo.description }}</p>
           </div>
           <div class="flex items-center gap-4 mt-3 pt-2 border-t border-border text-xs text-muted">
-            <span v-if="repo.language" class="flex items-center gap-1">
-              <span class="w-2.5 h-2.5 rounded-full bg-teal inline-block"></span>
+            <span v-if="repo.language" class="inline-flex items-center rounded-full bg-teal-light px-2.5 py-1 text-xs font-medium text-teal">
               {{ repo.language }}
             </span>
             <span v-if="repo.stargazers_count > 0" class="flex items-center gap-1">
