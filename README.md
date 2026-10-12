@@ -9,7 +9,8 @@ A responsive personal portfolio for Barnabas Kipruto, a mechanical technician an
 - **Responsive layout:** Adapts from mobile to desktop, with work history and qualifications arranged alongside the profile on wider screens.
 - **Light and dark themes:** The site follows the visitor's system preference on their first visit. The theme toggle lets them choose a theme, and that selection is saved in browser `localStorage`.
 - **Portfolio sections:** Displays profile details, work history, academic qualifications, and GitHub repositories. On smaller screens, the work and education sections can be expanded or collapsed.
-- **Live GitHub repositories:** Loads public repositories from the GitHub users API, sorted by most recently updated. Cards show available descriptions, primary languages, and star counts.
+- **Live GitHub repositories:** Loads public repositories from the GitHub users API, sorted by most recently updated. Filter repositories in place by their primary language; cards show descriptions, languages, star counts, and an optional GitHub link.
+- **Experience and coursework:** Work-history cards expand inline to show CV-based responsibilities and skills. Relevant mechanical engineering coursework appears under the university qualification.
 - **Loading and error states:** Shows placeholders while repositories load and an error message if the request fails.
 - **Theme control accessibility:** Exposes the selected theme with `aria-pressed` and supports keyboard focus.
 

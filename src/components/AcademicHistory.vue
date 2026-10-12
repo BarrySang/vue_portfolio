@@ -16,6 +16,18 @@ const academicData = getAcademicData()
         <p class="font-semibold text-navy">{{ item.course }}</p>
         <p class="text-navy/80">{{ item.school }}</p>
         <p class="text-sm text-muted mt-1">{{ item.duration }}</p>
+        <div v-if="item.coursework?.length" class="mt-3">
+          <p class="text-sm font-medium text-navy">Relevant coursework</p>
+          <ul class="mt-2 flex flex-wrap gap-2" aria-label="Relevant coursework">
+            <li
+              v-for="subject in item.coursework"
+              :key="subject"
+              class="rounded-full bg-teal-light px-2.5 py-1 text-xs font-medium text-teal"
+            >
+              {{ subject }}
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
   </SectionToggle>
