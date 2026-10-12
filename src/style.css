@@ -3,8 +3,37 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    color-scheme: light;
+    --color-surface: 238 242 246;
+    --color-card: 255 255 255;
+    --color-navy: 11 37 69;
+    --color-navy-dark: 8 27 51;
+    --color-navy-light: 231 237 245;
+    --color-teal: 13 148 136;
+    --color-teal-light: 204 251 241;
+    --color-muted: 100 116 139;
+    --color-border: 221 227 234;
+  }
+
+  :root.dark {
+    color-scheme: dark;
+    --color-surface: 15 23 42;
+    --color-card: 30 41 59;
+    --color-navy: 226 232 240;
+    --color-navy-dark: 2 6 23;
+    --color-navy-light: 51 65 85;
+    --color-teal: 45 212 191;
+    --color-teal-light: 19 78 74;
+    --color-muted: 148 163 184;
+    --color-border: 51 65 85;
+  }
+
+  html {
+    @apply bg-surface;
+  }
+
   body {
-    background-color: theme('colors.surface');
-    color: theme('colors.navy');
+    @apply bg-surface text-navy;
   }
 }

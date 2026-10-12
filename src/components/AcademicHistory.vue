@@ -14,7 +14,7 @@ const academicData = getAcademicData()
         class="bg-card border border-border rounded-lg p-4 shadow-sm font-sans border-l-4 border-l-teal hover:shadow-md transition-shadow"
       >
         <p class="font-semibold text-navy">{{ item.course }}</p>
-        <p class="text-gray-700">{{ item.school }}</p>
+        <p class="text-navy/80">{{ item.school }}</p>
         <p class="text-sm text-muted mt-1">{{ item.duration }}</p>
       </div>
     </div>

@@ -14,7 +14,7 @@ const workData = getWorkExperience()
         class="bg-card border border-border rounded-lg p-4 shadow-sm font-sans border-l-4 border-l-teal hover:shadow-md transition-shadow"
       >
         <p class="font-semibold text-navy">{{ item.organization }}</p>
-        <p class="text-gray-700">{{ item.position }}</p>
+        <p class="text-navy/80">{{ item.position }}</p>
         <p v-if="item.duration" class="text-sm text-muted mt-1">{{ item.duration }}</p>
       </div>
     </div>

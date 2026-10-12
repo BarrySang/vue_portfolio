@@ -35,9 +35,9 @@ onMounted(() => {
           :key="n"
           class="min-h-40 bg-card border border-border rounded-xl p-5 animate-pulse"
         >
-          <div class="h-4 bg-gray-300 rounded w-2/3 mb-2"></div>
-          <div class="h-3 bg-gray-200 rounded w-full mb-1.5"></div>
-          <div class="h-3 bg-gray-200 rounded w-1/3"></div>
+          <div class="h-4 bg-border/80 rounded w-2/3 mb-2"></div>
+          <div class="h-3 bg-border/50 rounded w-full mb-1.5"></div>
+          <div class="h-3 bg-border/50 rounded w-1/3"></div>
         </div>
       </div>
 
