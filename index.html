@@ -4,9 +4,18 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vue_portfolio/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>portfolio</title>
-    <script type="module" crossorigin src="/vue_portfolio/assets/index-BckKCL_o.js"></script>
-    <link rel="stylesheet" crossorigin href="/vue_portfolio/assets/index-D_mppLe_.css">
+    <meta name="theme-color" content="#eef2f6" />
+    <script>
+      const savedTheme = localStorage.getItem('portfolio-theme')
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+
+      if (savedTheme === 'dark' || (savedTheme !== 'light' && prefersDark)) {
+        document.documentElement.classList.add('dark')
+      }
+    </script>
+    <title>Portfolio</title>
+    <script type="module" crossorigin src="/vue_portfolio/assets/index-aw56qUhW.js"></script>
+    <link rel="stylesheet" crossorigin href="/vue_portfolio/assets/index-sA5I0kXK.css">
   </head>
   <body>
     <div id="app"></div>
