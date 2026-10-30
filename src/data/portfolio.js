@@ -35,6 +35,8 @@ export function getWorkExperience() {
       organization: 'AutoXpress Kenya',
       position: 'Technician II – Light Vehicle Mechanic',
       duration: 'March 2026 – Present',
+      track: 'mechanical',
+      summary: 'Light vehicle servicing, brake and suspension overhaul, and electrical fault diagnosis.',
       responsibilities: [
         'Diagnose vehicle electrical and mechanical faults using diagnostic equipment and circuit testing.',
         'Perform routine servicing and scheduled maintenance to manufacturer specifications.',
@@ -59,6 +61,8 @@ export function getWorkExperience() {
       organization: 'AutoXpress Kenya',
       position: 'Light Vehicle Mechanic III – Internship',
       duration: 'October 2024 – December 2024',
+      track: 'mechanical',
+      summary: 'Assisting senior technicians with diagnostics, brake and suspension work, and service inspections.',
       responsibilities: [
         'Assisted senior technicians with vehicle diagnostics and routine mechanical checks.',
         'Replaced brake discs and pads, shock absorbers, wiper blades, and tyres.',
@@ -77,6 +81,8 @@ export function getWorkExperience() {
       organization: 'Chemomi Tea Factory',
       position: 'Technical Division Attachment',
       duration: 'September 2023 – December 2023',
+      track: 'mechanical',
+      summary: 'Hydraulic systems, tea-processing machinery, and preventive maintenance in a factory setting.',
       responsibilities: [
         'Operated and maintained hydraulic systems, tea-processing machinery, and factory utility vehicles.',
         'Assisted with C.T.C. rolling machines and configured automated packing machinery.',
@@ -95,6 +101,8 @@ export function getWorkExperience() {
       organization: 'Salim Wazaran Kenya',
       position: 'Technical Department Attachment',
       duration: 'September 2022 – November 2022',
+      track: 'mechanical',
+      summary: 'Flour-processing machinery, conveyor systems, and factory plumbing and wiring support.',
       responsibilities: [
         'Maintained and repaired flour-processing machinery, conveyor systems, and motor housings.',
         'Operated flour sieving and mixing systems and cleared machinery blockages.',
@@ -114,6 +122,8 @@ export function getWorkExperience() {
       organization: 'DigitalSelf',
       position: 'Frontend Web Developer (Contract)',
       duration: 'January 2021',
+      track: 'software',
+      summary: 'React.js interface components with CAPTCHA verification and PayPal payments.',
       responsibilities: [
         'Built responsive page-level user interface components with React.js.',
         'Integrated CAPTCHA verification to reduce spam submissions.',
@@ -131,6 +141,8 @@ export function getWorkExperience() {
       organization: 'Studio48',
       position: 'Backend Web Developer (Contract)',
       duration: 'April 2020 – May 2020',
+      track: 'software',
+      summary: 'Laravel migrations and Blade templates for an e-commerce site.',
       responsibilities: [
         'Created and ran Laravel database migrations to add product data and manage tables, columns, and relationships.',
         'Updated e-commerce content and user interface pages using Laravel Blade templates.'
@@ -149,6 +161,8 @@ export function getWorkExperience() {
       organization: 'Kapsabet Bible College',
       position: 'Assistant Computer Teacher',
       duration: 'May 2019 – August 2019',
+      track: 'software',
+      summary: 'Practical Microsoft Office sessions and introductory computing and networking instruction.',
       responsibilities: [
         'Taught practical Microsoft Office sessions.',
         'Introduced students to fundamental computing and networking concepts.'

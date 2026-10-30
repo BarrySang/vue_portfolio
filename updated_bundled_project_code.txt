@@ -1,0 +1,1204 @@
+
+================================================================================
+FILE: src/App.vue
+================================================================================
+
+<script setup>
+import { ref } from 'vue'
+import HeroSection from './components/HeroSection.vue'
+import ProfileHeader from './components/ProfileHeader.vue'
+import GithubRepos from './components/GithubRepos.vue'
+import WorkHistory from './components/WorkHistory.vue'
+import AcademicHistory from './components/AcademicHistory.vue'
+import AppFooter from './components/AppFooter.vue'
+
+const isDarkMode = ref(document.documentElement.classList.contains('dark'))
+
+function toggleTheme() {
+  isDarkMode.value = !isDarkMode.value
+  document.documentElement.classList.toggle('dark', isDarkMode.value)
+  localStorage.setItem('portfolio-theme', isDarkMode.value ? 'dark' : 'light')
+}
+</script>
+
+<template>
+  <div class="max-w-6xl mx-auto px-3 sm:px-6">
+    <div class="flex justify-end pt-4">
+      <button
+        type="button"
+        :aria-pressed="isDarkMode"
+        @click="toggleTheme"
+        class="inline-flex items-center gap-2 rounded-lg border border-border px-3 py-2 text-sm font-medium text-navy transition-colors hover:bg-navy-light focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal focus-visible:ring-offset-2 focus-visible:ring-offset-surface"
+      >
+        <svg
+          v-if="isDarkMode"
+          aria-hidden="true"
+          class="h-4 w-4"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <circle cx="12" cy="12" r="4" />
+          <path stroke-linecap="round" d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42" />
+        </svg>
+        <svg
+          v-else
+          aria-hidden="true"
+          class="h-4 w-4"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path stroke-linecap="round" stroke-linejoin="round" d="M20.5 15.5A8.5 8.5 0 0 1 8.5 3.5 8.5 8.5 0 1 0 20.5 15.5Z" />
+        </svg>
+        {{ isDarkMode ? 'Use light theme' : 'Use dark theme' }}
+      </button>
+    </div>
+
+    <HeroSection />
+
+    <div class="h-px bg-gradient-to-r from-transparent via-teal/40 to-transparent my-6"></div>
+
+    <section class="flex flex-col gap-6 lg:grid lg:grid-cols-[minmax(0,320px)_1fr] lg:items-start">
+      <div class="lg:sticky lg:top-6">
+        <ProfileHeader />
+      </div>
+
+      <div class="flex min-w-0 flex-col gap-6">
+        <WorkHistory />
+
+        <AcademicHistory />
+
+        <div class="h-px bg-gradient-to-r from-transparent via-teal/40 to-transparent"></div>
+
+        <div id="github-repos">
+          <GithubRepos />
+        </div>
+      </div>
+    </section>
+
+    <AppFooter />
+  </div>
+</template>
+
+
+
+================================================================================
+FILE: src/components/AcademicHistory.vue
+================================================================================
+
+<script setup>
+import { getAcademicData } from '../data/portfolio.js'
+import SectionToggle from './SectionToggle.vue'
+
+const academicData = getAcademicData()
+</script>
+
+<template>
+  <SectionToggle title="Academic Qualifications">
+    <div class="flex flex-col gap-3">
+      <div
+        v-for="(item, index) in academicData"
+        :key="index"
+        class="bg-card border border-border rounded-lg p-4 shadow-sm font-sans border-l-4 border-l-teal hover:shadow-md transition-shadow"
+      >
+        <p class="font-semibold text-navy">{{ item.course }}</p>
+        <p class="text-navy/80">{{ item.school }}</p>
+        <p class="text-sm text-muted mt-1">{{ item.duration }}</p>
+        <div v-if="item.coursework?.length" class="mt-3">
+          <p class="text-sm font-medium text-navy">Relevant coursework</p>
+          <ul class="mt-2 flex flex-wrap gap-2" aria-label="Relevant coursework">
+            <li
+              v-for="subject in item.coursework"
+              :key="subject"
+              class="rounded-full bg-teal-light px-2.5 py-1 text-xs font-medium text-teal"
+            >
+              {{ subject }}
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </SectionToggle>
+</template>
+
+
+
+================================================================================
+FILE: src/components/AppFooter.vue
+================================================================================
+
+<script setup>
+const year = new Date().getFullYear()
+
+const socialLinks = [
+  { label: 'GitHub', href: 'https://github.com/barrysang' }
+]
+</script>
+
+<template>
+  <footer class="flex flex-col items-center justify-center gap-4 py-8 mt-6 border-t border-border font-sans">
+    <div class="flex items-center gap-5">
+      <a
+        v-for="link in socialLinks"
+        :key="link.label"
+        :href="link.href"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="text-sm text-muted hover:text-navy transition-colors"
+      >
+        {{ link.label }}
+      </a>
+    </div>
+    <p class="text-sm text-muted">&copy; {{ year }} Barnabas Kipruto</p>
+    <p class="text-xs text-muted/70">Built with Vue &amp; Tailwind</p>
+  </footer>
+</template>
+
+
+
+================================================================================
+FILE: src/components/GithubRepos.vue
+================================================================================
+
+<script setup>
+import { computed, ref, onMounted } from 'vue'
+import { getRepos } from '../data/portfolio.js'
+import SectionToggle from './SectionToggle.vue'
+
+const repos = ref([])
+const error = ref(null)
+const loading = ref(true)
+const selectedLanguage = ref('all')
+
+const languageOptions = computed(() => {
+  const languages = [...new Set(repos.value.map(repo => repo.language).filter(Boolean))]
+    .sort((a, b) => a.localeCompare(b, undefined, { sensitivity: 'base' }))
+
+  return [
+    ...languages.map(language => ({ label: language, value: `language:${language}` })),
+    ...(repos.value.some(repo => !repo.language)
+      ? [{ label: 'No language specified', value: 'no-language' }]
+      : [])
+  ]
+})
+
+const filteredRepos = computed(() => {
+  if (selectedLanguage.value === 'all') {
+    return repos.value
+  }
+
+  if (selectedLanguage.value === 'no-language') {
+    return repos.value.filter(repo => !repo.language)
+  }
+
+  const language = selectedLanguage.value.slice('language:'.length)
+  return repos.value.filter(repo => repo.language === language)
+})
+
+function formatRepoName(name) {
+  const sentenceCaseName = name.toLowerCase()
+  return sentenceCaseName.charAt(0).toUpperCase() + sentenceCaseName.slice(1)
+}
+
+onMounted(() => {
+  getRepos()
+    .then(data => {
+      repos.value = data.sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at))
+    })
+    .catch(err => {
+      error.value = err.message || String(err)
+    })
+    .finally(() => {
+      loading.value = false
+    })
+})
+</script>
+
+<template>
+  <SectionToggle title="Github Repositories">
+    <div>
+      <div v-if="loading" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div
+          v-for="n in 6"
+          :key="n"
+          class="min-h-40 bg-card border border-border rounded-xl p-5 animate-pulse"
+        >
+          <div class="h-4 bg-border/80 rounded w-2/3 mb-2"></div>
+          <div class="h-3 bg-border/50 rounded w-full mb-1.5"></div>
+          <div class="h-3 bg-border/50 rounded w-1/3"></div>
+        </div>
+      </div>
+
+      <div v-else-if="error" class="bg-card border border-border rounded-lg p-4 shadow-sm font-sans">
+        <p class="font-semibold text-navy">An error occurred, please reload the page.</p>
+        <p class="text-sm text-muted mt-2 border-t border-border pt-2">{{ error }}</p>
+      </div>
+
+      <div v-else>
+        <div class="mb-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+          <label for="repository-language" class="text-sm font-medium text-navy">Filter by primary language</label>
+          <select
+            id="repository-language"
+            v-model="selectedLanguage"
+            class="w-full rounded-lg border border-border bg-card px-3 py-2 text-sm text-navy focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal focus-visible:ring-offset-2 sm:w-auto"
+          >
+            <option value="all">All languages</option>
+            <option v-for="option in languageOptions" :key="option.value" :value="option.value">
+              {{ option.label }}
+            </option>
+          </select>
+        </div>
+
+        <p class="mb-3 text-sm text-muted" role="status" aria-live="polite">
+          Showing {{ filteredRepos.length }} of {{ repos.length }} repositories
+        </p>
+
+        <div v-if="filteredRepos.length" class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <article
+            v-for="repo in filteredRepos"
+            :key="repo.id"
+            class="min-h-40 bg-card border border-border rounded-xl p-5 shadow-sm font-sans flex flex-col justify-between transition-[border-color,box-shadow] hover:border-teal/50 hover:shadow-md"
+          >
+            <div>
+              <h3 class="text-lg font-semibold leading-snug text-navy break-words">{{ formatRepoName(repo.name) }}</h3>
+              <p v-if="repo.description" class="text-sm text-muted mt-2 leading-relaxed line-clamp-3">{{ repo.description }}</p>
+            </div>
+            <div class="mt-3 flex flex-wrap items-center gap-3 border-t border-border pt-2 text-xs text-muted">
+              <span v-if="repo.language" class="inline-flex items-center rounded-full bg-teal-light px-2.5 py-1 text-xs font-medium text-teal">
+                {{ repo.language }}
+              </span>
+              <span v-else class="inline-flex items-center rounded-full bg-navy-light px-2.5 py-1 text-xs font-medium text-muted">
+                No language specified
+              </span>
+              <span v-if="repo.stargazers_count > 0" class="flex items-center gap-1">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
+                  <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
+                </svg>
+                {{ repo.stargazers_count }}
+              </span>
+              <a
+                :href="repo.html_url"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="ml-auto font-medium text-teal underline-offset-2 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal focus-visible:ring-offset-2"
+                :aria-label="`View ${formatRepoName(repo.name)} on GitHub (opens in a new tab)`"
+              >
+                View on GitHub
+              </a>
+            </div>
+          </article>
+        </div>
+        <p v-else class="rounded-lg border border-border bg-card p-4 text-sm text-muted">
+          No repositories match this language.
+        </p>
+      </div>
+    </div>
+  </SectionToggle>
+</template>
+
+
+
+================================================================================
+FILE: src/components/HeroSection.vue
+================================================================================
+
+<script setup>
+</script>
+
+<template>
+  <section class="w-full py-10 sm:py-14 font-sans text-center sm:text-left">
+    <p class="text-sm sm:text-base font-semibold uppercase tracking-widest text-teal mb-2">
+      Mechanical Technician &middot; Web Developer
+    </p>
+    <h1 class="text-4xl sm:text-6xl font-extrabold tracking-tight text-navy mb-4">
+      Hi, I'm Barnabas Kipruto
+    </h1>
+    <p class="text-base sm:text-lg text-navy/80 max-w-2xl mx-auto sm:mx-0 mb-6">
+  Mechanical technician with hands-on experience in vehicle servicing,
+  diagnostics, and repair, alongside web development experience across
+  Vue, React, Node, and PHP.
+</p>
+    <div class="flex flex-col sm:flex-row items-center sm:items-start justify-center sm:justify-start gap-3">
+      <a
+        href="https://github.com/barrysang"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="inline-flex items-center justify-center gap-2 bg-navy text-white px-5 py-2.5 rounded-lg text-sm sm:text-base font-medium hover:bg-navy-dark transition-colors dark:bg-teal dark:text-slate-950 dark:hover:bg-teal-light dark:hover:text-white"
+      >
+        Contact on GitHub
+      </a>
+      <a
+        href="#github-repos"
+        class="inline-flex items-center justify-center gap-2 border border-border text-navy px-5 py-2.5 rounded-lg text-sm sm:text-base font-medium hover:bg-navy-light transition-colors"
+      >
+        See Projects
+      </a>
+    </div>
+  </section>
+</template>
+
+
+
+================================================================================
+FILE: src/components/ProfileHeader.vue
+================================================================================
+
+<script setup>
+</script>
+
+<template>
+  <div class="flex flex-col items-center sm:items-start gap-6 w-full bg-navy-light rounded-lg p-6 sm:p-8 font-sans">
+    <img
+      src="/profile/profile-2.jpeg"
+      class="w-32 h-32 sm:w-36 sm:h-36 rounded-full object-cover shadow"
+      alt="Profile picture"
+    />
+
+    <div class="flex flex-col gap-2 text-center sm:text-left w-full">
+      <h2 class="text-xl sm:text-2xl font-bold text-navy">Barnabas Kipruto</h2>
+      <p class="text-sm text-muted">Nairobi, Kenya</p>
+
+      <div class="flex flex-col gap-2 mt-3 text-navy/80 w-full">
+        <a href="https://github.com/barrysang" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 justify-center sm:justify-start hover:text-navy transition-colors">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 shrink-0 text-teal" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8" />
+          </svg>
+          <span class="text-sm sm:text-base break-all">github.com/barrysang</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</template>
+
+
+
+================================================================================
+FILE: src/components/SectionToggle.vue
+================================================================================
+
+<script setup>
+import { ref } from 'vue'
+
+defineProps({
+  title: String
+})
+
+const isOpen = ref(false)
+
+function toggle() {
+  isOpen.value = !isOpen.value
+}
+</script>
+
+<template>
+  <div>
+    <div
+      class="rounded-lg bg-navy-light p-3 text-navy font-sans flex items-center gap-2 cursor-pointer sm:cursor-default"
+      @click="toggle"
+    >
+      <svg
+        class="w-5 h-5 shrink-0 sm:hidden transition-transform duration-300"
+        :class="{ 'rotate-90': isOpen }"
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        stroke-width="2"
+      >
+        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+      </svg>
+      <h2 class="text-lg font-semibold tracking-wide">{{ title }}</h2>
+    </div>
+    <div class="mt-3 sm:block" :class="{ 'hidden': !isOpen }">
+      <slot />
+    </div>
+  </div>
+</template>
+
+
+
+================================================================================
+FILE: src/components/WorkHistory.vue
+================================================================================
+
+<script setup>
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { getWorkExperience } from '../data/portfolio.js'
+
+const TRACKS = {
+  mechanical: {
+    badge: 'Mechanical & Technical Role',
+    drawerBadge: 'Mechanical Track',
+    badgeClass:
+      'border-amber-500/50 bg-amber-500/10 text-amber-700 dark:text-amber-300',
+    dotClass: 'bg-amber-500',
+    selectedCardClass:
+      'border-amber-500 bg-amber-500/10 shadow-[0_0_18px_rgba(245,158,11,0.25)]',
+    orgClass: 'text-amber-700 dark:text-amber-300'
+  },
+  software: {
+    badge: 'Software Development & IT Role',
+    drawerBadge: 'Software / IT Track',
+    badgeClass:
+      'border-cyan-500/50 bg-cyan-500/10 text-cyan-700 dark:text-cyan-300',
+    dotClass: 'bg-cyan-500',
+    selectedCardClass:
+      'border-cyan-500 bg-cyan-500/10 shadow-[0_0_18px_rgba(6,182,212,0.25)]',
+    orgClass: 'text-cyan-700 dark:text-cyan-300'
+  }
+}
+
+const filters = [
+  { value: 'all', label: 'All Tracks' },
+  { value: 'mechanical', label: 'Mechanical / Tech' },
+  { value: 'software', label: 'Software / IT' }
+]
+
+const entries = getWorkExperience().map((item, id) => ({
+  ...item,
+  id,
+  year: item.duration.match(/\d{4}/)?.[0] ?? '',
+  trackInfo: TRACKS[item.track] ?? TRACKS.mechanical
+}))
+
+const activeFilter = ref('all')
+const selectedId = ref(entries[0]?.id ?? 0)
+const drawerOpen = ref(false)
+
+const scroller = ref(null)
+const closeButton = ref(null)
+const thumbWidth = ref(100)
+const thumbLeft = ref(0)
+
+const cardEls = {}
+let lockUntil = 0
+let rafId = 0
+let triggerEl = null
+
+const visibleEntries = computed(() =>
+  activeFilter.value === 'all'
+    ? entries
+    : entries.filter(entry => entry.track === activeFilter.value)
+)
+
+const selected = computed(
+  () => visibleEntries.value.find(entry => entry.id === selectedId.value) ?? visibleEntries.value[0]
+)
+
+function prefersReducedMotion() {
+  return window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+}
+
+function setCardRef(id, el) {
+  if (el) cardEls[id] = el
+}
+
+function updateProgress() {
+  const el = scroller.value
+  if (!el || !el.scrollWidth) return
+  const ratio = el.clientWidth / el.scrollWidth
+  thumbWidth.value = Math.min(100, ratio * 100)
+  thumbLeft.value = ratio >= 1 ? 0 : (el.scrollLeft / el.scrollWidth) * 100
+}
+
+function syncSelection() {
+  const el = scroller.value
+  const list = visibleEntries.value
+  if (!el || !list.length || Date.now() < lockUntil) return
+
+  let target
+  if (el.scrollLeft <= 1) {
+    target = list[0]
+  } else if (el.scrollLeft + el.clientWidth >= el.scrollWidth - 1) {
+    target = list[list.length - 1]
+  } else {
+    const center = el.scrollLeft + el.clientWidth / 2
+    let best = Infinity
+    for (const entry of list) {
+      const card = cardEls[entry.id]
+      if (!card) continue
+      const distance = Math.abs(card.offsetLeft + card.offsetWidth / 2 - center)
+      if (distance < best) {
+        best = distance
+        target = entry
+      }
+    }
+  }
+  if (target) selectedId.value = target.id
+}
+
+function onScroll() {
+  cancelAnimationFrame(rafId)
+  rafId = requestAnimationFrame(() => {
+    updateProgress()
+    syncSelection()
+  })
+}
+
+function centerCard(id) {
+  const el = scroller.value
+  const card = cardEls[id]
+  if (!el || !card) return
+  el.scrollTo({
+    left: card.offsetLeft - (el.clientWidth - card.offsetWidth) / 2,
+    behavior: prefersReducedMotion() ? 'auto' : 'smooth'
+  })
+}
+
+function selectEntry(id) {
+  selectedId.value = id
+  lockUntil = Date.now() + 800
+  centerCard(id)
+}
+
+function setFilter(value) {
+  activeFilter.value = value
+}
+
+watch(activeFilter, async () => {
+  const first = visibleEntries.value[0]
+  if (first) selectedId.value = first.id
+  lockUntil = Date.now() + 300
+  await nextTick()
+  scroller.value?.scrollTo({ left: 0, behavior: 'auto' })
+  updateProgress()
+})
+
+async function openDrawer(id, event) {
+  selectedId.value = id
+  triggerEl = event?.currentTarget ?? null
+  drawerOpen.value = true
+  await nextTick()
+  closeButton.value?.focus()
+}
+
+function closeDrawer() {
+  drawerOpen.value = false
+  triggerEl?.focus?.()
+  triggerEl = null
+}
+
+function onKeydown(event) {
+  if (event.key === 'Escape' && drawerOpen.value) closeDrawer()
+}
+
+watch(drawerOpen, open => {
+  document.body.style.overflow = open ? 'hidden' : ''
+})
+
+onMounted(() => {
+  updateProgress()
+  window.addEventListener('resize', updateProgress)
+  window.addEventListener('keydown', onKeydown)
+})
+
+onBeforeUnmount(() => {
+  cancelAnimationFrame(rafId)
+  window.removeEventListener('resize', updateProgress)
+  window.removeEventListener('keydown', onKeydown)
+  document.body.style.overflow = ''
+})
+</script>
+
+<template>
+  <section class="font-sans" aria-labelledby="career-timeline-title">
+    <div class="flex items-center gap-3">
+      <svg
+        aria-hidden="true"
+        class="h-7 w-7 shrink-0 text-amber-500"
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <circle cx="17" cy="5" r="2.5" />
+        <path d="M17 7.5V10a3 3 0 0 1-3 3H8a3 3 0 0 0-3 3v0a3 3 0 0 0 3 3h3" />
+        <circle cx="5" cy="19" r="0.5" />
+      </svg>
+      <h2 id="career-timeline-title" class="text-2xl font-bold tracking-tight text-navy sm:text-3xl">
+        Career Journey Timeline
+      </h2>
+    </div>
+    <p class="mt-2 text-muted">
+      Click milestone nodes on the track to focus on roles &amp; trigger detail drawers.
+    </p>
+
+    <!-- Track filter -->
+    <div
+      class="mt-5 grid grid-cols-3 gap-1 rounded-2xl border border-border bg-card p-1"
+      role="group"
+      aria-label="Filter career timeline by track"
+    >
+      <button
+        v-for="filter in filters"
+        :key="filter.value"
+        type="button"
+        :aria-pressed="activeFilter === filter.value"
+        class="flex flex-col items-center justify-center gap-1 rounded-xl px-2 py-2.5 text-center text-sm font-medium leading-tight transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal sm:flex-row sm:gap-2"
+        :class="
+          activeFilter === filter.value
+            ? 'bg-navy-light text-navy'
+            : 'text-muted hover:text-navy'
+        "
+        @click="setFilter(filter.value)"
+      >
+        <svg
+          v-if="filter.value === 'all'"
+          aria-hidden="true"
+          class="h-4 w-4 shrink-0"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+        >
+          <circle cx="12" cy="12" r="9" />
+          <path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18" />
+        </svg>
+        <svg
+          v-else-if="filter.value === 'mechanical'"
+          aria-hidden="true"
+          class="h-4 w-4 shrink-0 text-amber-500"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <circle cx="9" cy="9" r="3" />
+          <path d="M9 2v2m0 10v2M2 9h2m10 0h2M4.1 4.1l1.4 1.4m7 7 1.4 1.4m0-9.8-1.4 1.4m-7 7-1.4 1.4" />
+          <circle cx="17" cy="17" r="2" />
+          <path d="M17 12.5v1m0 7v1m-4.5-4.5h1m7 0h1" />
+        </svg>
+        <svg
+          v-else
+          aria-hidden="true"
+          class="h-4 w-4 shrink-0 text-cyan-500"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="m8 7-5 5 5 5M16 7l5 5-5 5M14 4l-4 16" />
+        </svg>
+        <span>{{ filter.label }}</span>
+      </button>
+    </div>
+
+    <!-- Timeline + detail -->
+    <div class="mt-6 rounded-3xl border border-border bg-card/60 p-4 sm:p-6">
+      <div
+        ref="scroller"
+        class="timeline-scroll relative flex snap-x snap-mandatory gap-3 overflow-x-auto scroll-smooth py-3"
+        role="list"
+        aria-label="Career milestones"
+        @scroll.passive="onScroll"
+      >
+        <div
+          v-for="entry in visibleEntries"
+          :key="entry.id"
+          :ref="el => setCardRef(entry.id, el)"
+          role="listitem"
+          class="w-44 shrink-0 snap-center rounded-2xl border p-4 transition-[border-color,background-color,box-shadow] duration-300 sm:w-56"
+          :class="
+            selected?.id === entry.id
+              ? entry.trackInfo.selectedCardClass
+              : 'border-border bg-card hover:border-teal/50'
+          "
+        >
+          <button
+            type="button"
+            class="block w-full text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal focus-visible:ring-offset-2 focus-visible:ring-offset-surface"
+            :aria-current="selected?.id === entry.id ? 'true' : undefined"
+            :aria-label="`${entry.year}: ${entry.position} at ${entry.organization}`"
+            @click="selectEntry(entry.id)"
+          >
+            <span class="flex items-center justify-between">
+              <span class="text-sm font-medium text-muted">{{ entry.year }}</span>
+              <span
+                aria-hidden="true"
+                class="h-2.5 w-2.5 rounded-full"
+                :class="entry.trackInfo.dotClass"
+              ></span>
+            </span>
+            <span class="mt-3 block truncate font-semibold text-navy">{{ entry.position }}</span>
+            <span class="mt-0.5 block truncate text-sm text-muted">{{ entry.organization }}</span>
+          </button>
+          <button
+            type="button"
+            class="mt-4 text-sm text-muted transition-colors hover:text-navy focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal"
+            :aria-label="`View details for ${entry.position} at ${entry.organization}`"
+            @click="openDrawer(entry.id, $event)"
+          >
+            View details &rarr;
+          </button>
+        </div>
+      </div>
+
+      <!-- scroll position indicator -->
+      <div class="mt-1 h-2 w-full rounded-full bg-border/40" aria-hidden="true">
+        <div
+          class="h-2 rounded-full bg-muted/50 transition-[left,width] duration-150"
+          :style="{ width: thumbWidth + '%', marginLeft: thumbLeft + '%' }"
+        ></div>
+      </div>
+
+      <div class="my-5 h-px bg-border"></div>
+
+      <div v-if="selected" aria-live="polite">
+        <div class="flex flex-wrap items-center gap-x-4 gap-y-2">
+          <span
+            class="rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-wider"
+            :class="selected.trackInfo.badgeClass"
+          >
+            {{ selected.trackInfo.badge }}
+          </span>
+          <span class="inline-flex items-center gap-1.5 text-sm text-muted">
+            <svg
+              aria-hidden="true"
+              class="h-4 w-4 shrink-0"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <rect x="3" y="5" width="18" height="16" rx="2" />
+              <path d="M3 10h18M8 3v4m8-4v4" />
+            </svg>
+            {{ selected.duration }}
+          </span>
+        </div>
+
+        <h3 class="mt-4 text-2xl font-bold leading-tight text-navy sm:text-3xl">
+          {{ selected.position }}
+        </h3>
+        <p class="mt-2 text-lg font-semibold" :class="selected.trackInfo.orgClass">
+          {{ selected.organization }}
+        </p>
+
+        <button
+          type="button"
+          class="mt-5 rounded-xl border border-border bg-card px-5 py-2.5 text-sm font-semibold text-navy transition-colors hover:bg-navy-light focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal focus-visible:ring-offset-2 focus-visible:ring-offset-surface"
+          @click="openDrawer(selected.id, $event)"
+        >
+          View responsibilities &amp; skills
+        </button>
+
+        <p v-if="selected.summary" class="mt-5 leading-relaxed text-muted">
+          {{ selected.summary }}
+        </p>
+      </div>
+      <p v-else class="text-sm text-muted">No roles in this track.</p>
+    </div>
+
+    <!-- Detail drawer -->
+    <Teleport to="body">
+      <Transition name="drawer">
+        <div
+          v-if="drawerOpen && selected"
+          class="fixed inset-0 z-50 flex justify-end font-sans"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="work-drawer-title"
+        >
+          <div class="drawer-backdrop absolute inset-0 bg-black/60" @click="closeDrawer"></div>
+          <aside
+            class="drawer-panel relative h-full w-full max-w-lg overflow-y-auto border-l border-border bg-surface p-6 text-navy shadow-2xl"
+          >
+            <div class="flex items-center justify-between gap-4">
+              <span
+                class="rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-wider"
+                :class="selected.trackInfo.badgeClass"
+              >
+                {{ selected.trackInfo.drawerBadge }}
+              </span>
+              <button
+                ref="closeButton"
+                type="button"
+                class="flex h-9 w-9 items-center justify-center rounded-full border border-border text-muted transition-colors hover:bg-navy-light hover:text-navy focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal"
+                aria-label="Close details"
+                @click="closeDrawer"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="h-4 w-4"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                >
+                  <path d="M6 6l12 12M18 6 6 18" />
+                </svg>
+              </button>
+            </div>
+
+            <div class="my-5 h-px bg-border"></div>
+
+            <p class="inline-flex items-center gap-1.5 text-sm text-muted">
+              <svg
+                aria-hidden="true"
+                class="h-4 w-4 shrink-0"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <rect x="3" y="5" width="18" height="16" rx="2" />
+                <path d="M3 10h18M8 3v4m8-4v4" />
+              </svg>
+              {{ selected.duration }}
+            </p>
+            <h3 id="work-drawer-title" class="mt-2 text-2xl font-bold leading-tight">
+              {{ selected.position }}
+            </h3>
+            <p class="mt-1 font-semibold" :class="selected.trackInfo.orgClass">
+              {{ selected.organization }}
+            </p>
+
+            <h4 class="mt-8 text-xs font-bold uppercase tracking-widest text-muted">
+              Key responsibilities
+            </h4>
+            <ul class="mt-3 space-y-2.5">
+              <li
+                v-for="responsibility in selected.responsibilities"
+                :key="responsibility"
+                class="flex items-start gap-2.5 text-sm leading-relaxed"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="mt-0.5 h-4 w-4 shrink-0 text-teal"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  stroke-width="2.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="m5 12 5 5 9-10" />
+                </svg>
+                <span class="text-navy/90">{{ responsibility }}</span>
+              </li>
+            </ul>
+
+            <h4 class="mt-8 text-xs font-bold uppercase tracking-widest text-muted">
+              Tools &amp; skills utilized
+            </h4>
+            <ul class="mt-3 flex flex-wrap gap-2">
+              <li
+                v-for="skill in selected.skills"
+                :key="skill"
+                class="rounded-lg border border-border bg-card px-3 py-1.5 text-sm text-navy"
+              >
+                {{ skill }}
+              </li>
+            </ul>
+          </aside>
+        </div>
+      </Transition>
+    </Teleport>
+  </section>
+</template>
+
+<style scoped>
+.timeline-scroll {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.timeline-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.drawer-enter-active,
+.drawer-leave-active {
+  transition: opacity 0.25s ease;
+}
+.drawer-enter-active .drawer-panel,
+.drawer-leave-active .drawer-panel {
+  transition: transform 0.3s ease;
+}
+.drawer-enter-from,
+.drawer-leave-to {
+  opacity: 0;
+}
+.drawer-enter-from .drawer-panel,
+.drawer-leave-to .drawer-panel {
+  transform: translateX(100%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .drawer-enter-active,
+  .drawer-leave-active,
+  .drawer-enter-active .drawer-panel,
+  .drawer-leave-active .drawer-panel {
+    transition: none;
+  }
+}
+</style>
+
+
+
+
+================================================================================
+FILE: src/data/portfolio.js
+================================================================================
+
+export function getRepos() {
+  return fetch('https://api.github.com/users/BarrySang/repos')
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status}`)
+      }
+      return response.json()
+    })
+}
+
+export function getAcademicData() {
+  return [
+    {
+      course: 'Bachelors Degree: Mechanical and Manufacturing Engineering',
+      school: 'Multimedia University of Kenya',
+      duration: '2018 - 2023',
+      coursework: [
+        'Technical Drawing',
+        'Computer Programming in C++',
+        'Material Science',
+        'Computer-Aided Design and Drawing'
+      ]
+    },
+    {
+      course: 'Certificate in Java Programming',
+      school: 'East African Institute of Certified Studies',
+      duration: 'August 2018 - September 2018'
+    }
+  ]
+}
+
+export function getWorkExperience() {
+  return [
+    {
+      organization: 'AutoXpress Kenya',
+      position: 'Technician II – Light Vehicle Mechanic',
+      duration: 'March 2026 – Present',
+      track: 'mechanical',
+      summary: 'Light vehicle servicing, brake and suspension overhaul, and electrical fault diagnosis.',
+      responsibilities: [
+        'Diagnose vehicle electrical and mechanical faults using diagnostic equipment and circuit testing.',
+        'Perform routine servicing and scheduled maintenance to manufacturer specifications.',
+        'Overhaul brakes, including pad and disc replacement, fluid flushing, and disc skimming.',
+        'Replace shock absorbers, coil springs, and worn suspension bushes.',
+        'Perform wheel alignment, balancing, tyre replacement, and puncture repairs.',
+        'Record work performed, parts replaced, and vehicle service histories while maintaining workshop safety.'
+      ],
+      skills: [
+        'Vehicle diagnostics',
+        'Electrical circuit testing',
+        'Routine servicing',
+        'Brake systems',
+        'Suspension and steering',
+        'Wheel alignment and balancing',
+        'Tyre care',
+        'Service documentation',
+        'Workshop safety'
+      ]
+    },
+    {
+      organization: 'AutoXpress Kenya',
+      position: 'Light Vehicle Mechanic III – Internship',
+      duration: 'October 2024 – December 2024',
+      track: 'mechanical',
+      summary: 'Assisting senior technicians with diagnostics, brake and suspension work, and service inspections.',
+      responsibilities: [
+        'Assisted senior technicians with vehicle diagnostics and routine mechanical checks.',
+        'Replaced brake discs and pads, shock absorbers, wiper blades, and tyres.',
+        'Performed pre- and post-service inspections to verify repairs and vehicle roadworthiness.'
+      ],
+      skills: [
+        'Vehicle diagnostics',
+        'Mechanical inspection',
+        'Brake systems',
+        'Suspension repair',
+        'Tyre and wiper replacement',
+        'Service quality checks'
+      ]
+    },
+    {
+      organization: 'Chemomi Tea Factory',
+      position: 'Technical Division Attachment',
+      duration: 'September 2023 – December 2023',
+      track: 'mechanical',
+      summary: 'Hydraulic systems, tea-processing machinery, and preventive maintenance in a factory setting.',
+      responsibilities: [
+        'Operated and maintained hydraulic systems, tea-processing machinery, and factory utility vehicles.',
+        'Assisted with C.T.C. rolling machines and configured automated packing machinery.',
+        'Performed routine maintenance, blade replacement, mechanical repairs, and welding and fabrication.'
+      ],
+      skills: [
+        'Hydraulic systems',
+        'Tea-processing machinery',
+        'Automated packing equipment',
+        'Preventive maintenance',
+        'Mechanical repair',
+        'Welding and fabrication'
+      ]
+    },
+    {
+      organization: 'Salim Wazaran Kenya',
+      position: 'Technical Department Attachment',
+      duration: 'September 2022 – November 2022',
+      track: 'mechanical',
+      summary: 'Flour-processing machinery, conveyor systems, and factory plumbing and wiring support.',
+      responsibilities: [
+        'Maintained and repaired flour-processing machinery, conveyor systems, and motor housings.',
+        'Operated flour sieving and mixing systems and cleared machinery blockages.',
+        'Repaired steam-line plumbing and assisted with factory electrical wiring installations.'
+      ],
+      skills: [
+        'Industrial machinery',
+        'Conveyor systems',
+        'Flour processing',
+        'Mechanical maintenance',
+        'Steam-line plumbing',
+        'Electrical wiring',
+        'Welding'
+      ]
+    },
+    {
+      organization: 'DigitalSelf',
+      position: 'Frontend Web Developer (Contract)',
+      duration: 'January 2021',
+      track: 'software',
+      summary: 'React.js interface components with CAPTCHA verification and PayPal payments.',
+      responsibilities: [
+        'Built responsive page-level user interface components with React.js.',
+        'Integrated CAPTCHA verification to reduce spam submissions.',
+        'Implemented PayPal payments and verified the integration using sandbox testing.'
+      ],
+      skills: [
+        'React.js',
+        'Responsive UI development',
+        'CAPTCHA integration',
+        'PayPal integration',
+        'Sandbox testing'
+      ]
+    },
+    {
+      organization: 'Studio48',
+      position: 'Backend Web Developer (Contract)',
+      duration: 'April 2020 – May 2020',
+      track: 'software',
+      summary: 'Laravel migrations and Blade templates for an e-commerce site.',
+      responsibilities: [
+        'Created and ran Laravel database migrations to add product data and manage tables, columns, and relationships.',
+        'Updated e-commerce content and user interface pages using Laravel Blade templates.'
+      ],
+      skills: [
+        'Laravel',
+        'PHP',
+        'Database migrations',
+        'MySQL',
+        'Database relationships',
+        'Blade templating',
+        'E-commerce'
+      ]
+    },
+    {
+      organization: 'Kapsabet Bible College',
+      position: 'Assistant Computer Teacher',
+      duration: 'May 2019 – August 2019',
+      track: 'software',
+      summary: 'Practical Microsoft Office sessions and introductory computing and networking instruction.',
+      responsibilities: [
+        'Taught practical Microsoft Office sessions.',
+        'Introduced students to fundamental computing and networking concepts.'
+      ],
+      skills: [
+        'Microsoft Office',
+        'Computer fundamentals',
+        'Networking fundamentals',
+        'Practical instruction'
+      ]
+    }
+  ]
+}
+
+
+================================================================================
+FILE: src/main.js
+================================================================================
+
+import { createApp } from 'vue'
+import './style.css'
+import App from './App.vue'
+
+createApp(App).mount('#app')
+
+
+
+================================================================================
+FILE: src/style.css
+================================================================================
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: light;
+    --color-surface: 238 242 246;
+    --color-card: 255 255 255;
+    --color-navy: 11 37 69;
+    --color-navy-dark: 8 27 51;
+    --color-navy-light: 231 237 245;
+    --color-teal: 13 148 136;
+    --color-teal-light: 204 251 241;
+    --color-muted: 100 116 139;
+    --color-border: 221 227 234;
+  }
+
+  :root.dark {
+    color-scheme: dark;
+    --color-surface: 15 23 42;
+    --color-card: 30 41 59;
+    --color-navy: 226 232 240;
+    --color-navy-dark: 2 6 23;
+    --color-navy-light: 51 65 85;
+    --color-teal: 45 212 191;
+    --color-teal-light: 19 78 74;
+    --color-muted: 148 163 184;
+    --color-border: 51 65 85;
+  }
+
+  html {
+    @apply bg-surface;
+  }
+
+  body {
+    @apply bg-surface text-navy;
+  }
+}
+
+

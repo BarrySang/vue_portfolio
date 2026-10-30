@@ -63,11 +63,10 @@ function toggleTheme() {
         <ProfileHeader />
       </div>
 
-      <div class="flex flex-col gap-6">
-        <div class="flex flex-col gap-6 sm:grid sm:grid-cols-2">
-          <WorkHistory />
-          <AcademicHistory />
-        </div>
+      <div class="flex min-w-0 flex-col gap-6">
+        <WorkHistory />
+
+        <AcademicHistory />
 
         <div class="h-px bg-gradient-to-r from-transparent via-teal/40 to-transparent"></div>
 
