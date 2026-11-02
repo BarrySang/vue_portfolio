@@ -1,11 +1,41 @@
 export function getRepos() {
-  return fetch('https://api.github.com/users/BarrySang/repos')
+  return fetch('https://api.github.com/users/BarrySang/repos?per_page=100&sort=updated')
     .then(response => {
       if (!response.ok) {
         throw new Error(`Error: ${response.status}`)
       }
       return response.json()
     })
+}
+
+const TECH_LABELS = {
+  react: 'React',
+  vue: 'Vue',
+  svelte: 'Svelte',
+  python: 'Python',
+  javascript: 'JavaScript',
+  php: 'PHP'
+}
+
+export const OTHER_TECH = 'Other'
+
+function toTitle(text) {
+  return text
+    .split(/[-_]+/)
+    .filter(Boolean)
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ')
+}
+
+// "react_unit-converter" -> { tech: 'React', title: 'Unit Converter' }
+export function parseRepoName(name) {
+  const [prefix, ...rest] = name.split('_')
+  const tech = TECH_LABELS[prefix.toLowerCase()]
+
+  if (!tech || rest.length === 0) {
+    return { tech: OTHER_TECH, title: toTitle(name) }
+  }
+  return { tech, title: toTitle(rest.join('_')) }
 }
 
 export function getAcademicData() {
