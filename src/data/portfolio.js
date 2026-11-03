@@ -44,6 +44,8 @@ export function getAcademicData() {
       course: 'Bachelors Degree: Mechanical and Manufacturing Engineering',
       school: 'Multimedia University of Kenya',
       duration: '2018 - 2023',
+      type: 'Degree',
+      track: 'mechanical',
       coursework: [
         'Technical Drawing',
         'Computer Programming in C++',
@@ -54,7 +56,9 @@ export function getAcademicData() {
     {
       course: 'Certificate in Java Programming',
       school: 'East African Institute of Certified Studies',
-      duration: 'August 2018 - September 2018'
+      duration: 'August 2018 - September 2018',
+      type: 'Certificate',
+      track: 'software'
     }
   ]
 }
